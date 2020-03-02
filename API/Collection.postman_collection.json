@@ -167,8 +167,8 @@
 					"script": {
 						"id": "63b7a23b-6cd0-476f-8a3b-d70eb8c7c2ac",
 						"exec": [
-							"pm.test(\"Response time is less than 200ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(1500);",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
 							"});",
 							"",
 							"pm.test(\"Successful POST request\", function () {",
@@ -231,7 +231,11 @@
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							""
+							"",
+							"pm.test(\"Tag Updated\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].tags.NewTestTag).to.eql(\"123\");",
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -384,6 +388,126 @@
 						"api",
 						"tagmanager",
 						"setresourcegrouptags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createNewResourceGroup WithTags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1845743e-6f5c-4e7c-8c20-0e0bb8e0c295",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tags Established\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.tags.testTag1).to.eql(\"123\");",
+							"});",
+							"",
+							"pm.test(\"Tags Established 2\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.tags.testTag2).to.eql(\"456\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"access_token\": \"{{bearerToken}}\",\n    \"subscriptionID\": \"12557534-667b-4c2b-a4e5-6a1fde825cda\",\n    \"resourceGroupName\": \"abcde\",\n    \"location\": \"eastus\",\n    \"tags\":{\n    \t\"testTag1\":\"123\",\n    \t\"testTag2\":\"456\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://afptagmanager-devtest.azurewebsites.net/api/tagmanager/createNewResourceGroup",
+					"protocol": "https",
+					"host": [
+						"afptagmanager-devtest",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"tagmanager",
+						"createNewResourceGroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createNewResourceGroup WithoutTags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1845743e-6f5c-4e7c-8c20-0e0bb8e0c295",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tags Established\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.location).to.eql(\"eastus\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"access_token\": \"{{bearerToken}}\",\n    \"subscriptionID\": \"12557534-667b-4c2b-a4e5-6a1fde825cda\",\n    \"resourceGroupName\": \"abcde\",\n    \"location\": \"eastus\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://afptagmanager-devtest.azurewebsites.net/api/tagmanager/createNewResourceGroup",
+					"protocol": "https",
+					"host": [
+						"afptagmanager-devtest",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"tagmanager",
+						"createNewResourceGroup"
 					]
 				}
 			},
