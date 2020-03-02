@@ -331,6 +331,63 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "setresourcegrouptags",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d28d4fe0-e822-4b38-807a-19e4683bd63d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Tag Updated\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].tags.NewTestTag).to.eql(\"123\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"access_token\":\"{{bearerToken}}\",\n\t\"resource_groups\":[{\n        \"id\": \"/subscriptions/12557534-667b-4c2b-a4e5-6a1fde825cda/resourceGroups/28-Jan\",\n        \"tags\": {\n            \"NewTestTag\": \"123\"\n        }\n    }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://afptagmanager-devtest.azurewebsites.net/api/tagmanager/setresourcegrouptags",
+					"protocol": "https",
+					"host": [
+						"afptagmanager-devtest",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"tagmanager",
+						"setresourcegrouptags"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
